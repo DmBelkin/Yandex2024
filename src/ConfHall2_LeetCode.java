@@ -4,18 +4,15 @@ public class ConfHall2_LeetCode {
 
     public static void main(String[] args) {
         int[][] arr = new int[][]{
-                {39, 49},
-                {28, 39},
-                {9, 29},
-                {10, 36},
-                {22, 47},
-                {2, 3},
-                {4, 49},
-                {46, 50},
-                {45, 50},
-                {17, 33}
+                {1,10},
+                {2,10},
+                {3,10},
+                {4,10},
+                {5,10},
+                {6,10},
+                {7,10}
         };
-        System.out.println(mostBooked(3, arr));
+        System.out.println(mostBooked(2, arr));
     }
 
     public static int mostBooked(int n, int[][] meetings) {
@@ -45,40 +42,47 @@ public class ConfHall2_LeetCode {
         PriorityQueue<Meeting> stack = new PriorityQueue<>(meetingComparator1);
         while (!meetingPriorityQueue.isEmpty() || !stack.isEmpty()) {
             Meeting meeting = meetingPriorityQueue.peek();
-            Meeting meeting1 = stack.peek();
-            if (meeting1 != null && startTime == meeting1.end) {
-                while (!stack.isEmpty() && stack.peek().end == startTime) {
+            Room room = roomPriorityQueue.peek();
+            if (meeting != null && room != null) {
+                Meeting meeting2 = meetingPriorityQueue.peek();
+                if (stack.peek() != null && stack.peek().end <= meeting2.start) {
+                    roomPriorityQueue.add(stack.poll().room);
+                    continue;
+                }
+                meeting2 = meetingPriorityQueue.poll();
+                meeting2.room = roomPriorityQueue.poll();
+                meeting2.room.meetingsCount++;
+                stack.add(meeting2);
+                System.out.println("time=" + startTime + " roommumber=" + room.number +
+                        " meetnumber=" + meeting2.number + " meetstart=" + meeting2.start +
+                        " meetend=" + meeting2.end + "***" + meeting2.s);
+            } else {
+                System.out.println(stack);
+                Meeting meeting1 = meetingPriorityQueue.peek();
+                if (meeting1 != null) {
+                    if (stack.peek() != null && stack.peek().end <= meeting1.start) {
+                        roomPriorityQueue.add(stack.poll().room);
+                        continue;
+                    }
                     Meeting meeting2 = stack.poll();
                     roomPriorityQueue.add(meeting2.room);
-                    System.out.println("                         fromstack! time=" + startTime + " roommumber=" + meeting2.room.number +
-                            " meetnumber=" + meeting2.number + " meetend=" + meeting2.end +
-                            " meetingstart=" + meeting2.start + "***" + meeting2.s);
-                }
-            }
-            if (meeting != null && startTime == meeting.start) {
-                Room room = roomPriorityQueue.peek();
-                if (room != null) {
-                    while (!meetingPriorityQueue.isEmpty() && meetingPriorityQueue.peek().start == startTime
-                            && !roomPriorityQueue.isEmpty()) {
-                        Meeting meeting2 = meetingPriorityQueue.poll();
-                        meeting2.room = roomPriorityQueue.poll();
-                        meeting2.room.meetingsCount++;
-                        stack.add(meeting2);
-                        System.out.println("time=" + startTime + " roommumber=" + room.number +
-                                " meetnumber=" + meeting2.number + " meetstart=" + meeting2.start +
-                                " meetend=" + meeting2.end + "***" + meeting2.s);
+                    meeting1 = meetingPriorityQueue.poll();
+                    meeting1.room = roomPriorityQueue.poll();
+                    meeting1.room.meetingsCount++;
+                    int t = meeting1.end - meeting1.start;
+                    if (meeting2.end > meeting1.start) {
+                        meeting1.start = meeting2.end;
+                        meeting1.end = meeting1.start + t;
                     }
+                    stack.add(meeting1);
+                    System.out.println("                         fromstack! time=" + startTime + " roommumber=" +
+                            meeting1.room.number +
+                            " meetnumber=" + meeting1.number + " meetend=" + meeting1.end +
+                            " meetingstart=" + meeting1.start + "***" + meeting1.s);
+                } else {
+                    roomPriorityQueue.add(stack.poll().room);
                 }
             }
-            Iterator<Meeting> iterator = meetingPriorityQueue.iterator();
-            while (iterator.hasNext()) {
-                Meeting m = iterator.next();
-                if (m.start == startTime) {
-                    m.start++;
-                    m.end++;
-                }
-            }
-            startTime++;
         }
         System.out.println(stack);
         System.out.println(roomPriorityQueue);
@@ -105,17 +109,17 @@ public class ConfHall2_LeetCode {
         String s;
 
         public String toString() {
-            return "start=" + start + " " + "end=" + end + " number=" + number + "**" + s;
-            //" roomnumber" + room.number;
+            return "start=" + start + " " + "end=" + end + " number=" + number ;
+             //" roomnumber" + room.number;
         }
     }
 
     static class Room {
         int number;
         int meetingsCount;
+
         public String toString() {
             return "number=" + number + " " + "count=" + meetingsCount;
         }
     }
-
 }
