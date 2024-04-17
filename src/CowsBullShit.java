@@ -9,7 +9,7 @@ import java.util.List;
 public class CowsBullShit {
 
     public static void main(String[] args) throws IOException {
-        File file = new File("input.txt");
+        File file = new File("input/input.txt");
         List<String> list = Files.readAllLines(Paths.get(file.getPath()));
         int playersCount = Integer.parseInt(list.get(0));
         String input = list.get(1);
