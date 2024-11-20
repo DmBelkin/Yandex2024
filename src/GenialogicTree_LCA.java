@@ -95,7 +95,7 @@ public class GenialogicTree_LCA {
         return "";
     }
 
-    public static SchoolN1.Node add(Node node, Map<String, List<String>> map) {
+    public static Node add(Node node, Map<String, List<String>> map) {
         List<String> data = map.get(node.name);
         if (data != null) {
             for (String s : data) {
