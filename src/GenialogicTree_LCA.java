@@ -6,13 +6,13 @@ import java.util.*;
 
 public class GenialogicTree_LCA {
 
-    private static SchoolN1.Node node;
+    private static Node node;
 
-    private static SchoolN1.Node firsEl;
+    private static Node firsEl;
 
     private static StringBuilder result;
 
-    private static List<SchoolN1.Node> nodes = new ArrayList<>();
+    private static List<Node> nodes = new ArrayList<>();
 
     private static Map<String, List<String>> map;
 
@@ -23,13 +23,13 @@ public class GenialogicTree_LCA {
         int count = Integer.parseInt(list.get(0));
         list.remove(0);
         List<String> sub = list.subList(0, count - 1);
-        node = new SchoolN1.Node();
+        node = new Node();
         firsEl = node;
         map = new HashMap<>();
         node.name = getMainParent(sub);
         node.children = new ArrayList<>();
         nodes.add(node);
-        SchoolN1.Node tree = node;
+        Node tree = node;
         add(node, map);
         Collections.sort(nodes);
         result = new StringBuilder();
@@ -38,17 +38,17 @@ public class GenialogicTree_LCA {
             String[] data = list.get(i).split("\\s");
             String firstName = data[0];
             String secondName = data[1];
-            int a = Collections.binarySearch(nodes, new SchoolN1.Node(firstName));
-            int b = Collections.binarySearch(nodes, new SchoolN1.Node(secondName));
-            SchoolN1.Node node1 = nodes.get(a);
-            SchoolN1.Node node2 = nodes.get(b);
+            int a = Collections.binarySearch(nodes, new Node(firstName));
+            int b = Collections.binarySearch(nodes, new Node(secondName));
+            Node node1 = nodes.get(a);
+            Node node2 = nodes.get(b);
             result.append(search(node1, node2).name + "\n");
         }
         System.out.println(result.toString().trim());
     }
 
-    public static SchoolN1.Node search(SchoolN1.Node node1, SchoolN1.Node node2) {
-        List<SchoolN1.Node> parents1 = new ArrayList<>();
+    public static Node search(Node node1, Node node2) {
+        List<Node> parents1 = new ArrayList<>();
         while (node1 != null) {
             parents1.add(node1);
             if (node1 == node2) {
@@ -95,11 +95,11 @@ public class GenialogicTree_LCA {
         return "";
     }
 
-    public static SchoolN1.Node add(SchoolN1.Node node, Map<String, List<String>> map) {
+    public static SchoolN1.Node add(Node node, Map<String, List<String>> map) {
         List<String> data = map.get(node.name);
         if (data != null) {
             for (String s : data) {
-                SchoolN1.Node child = new SchoolN1.Node();
+                Node child = new Node();
                 child.name = s;
                 child.parent = node;
                 child.children = new ArrayList<>();
@@ -115,10 +115,10 @@ public class GenialogicTree_LCA {
         return null;
     }
 
-    static class Node implements Comparable<SchoolN1.Node> {
+    static class Node implements Comparable<Node> {
         String name;
-        SchoolN1.Node parent;
-        List<SchoolN1.Node> children;
+        Node parent;
+        List<Node> children;
         int childCount;
         int height;
 
@@ -134,7 +134,7 @@ public class GenialogicTree_LCA {
         }
 
         @Override
-        public int compareTo(SchoolN1.Node o) {
+        public int compareTo(Node o) {
             return (this.name).compareTo(o.name);
         }
     }
