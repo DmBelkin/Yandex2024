@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CowsBullShit {
+public class FunnyKorovyak {
 
     public static void main(String[] args) throws IOException {
         File file = new File("input/input.txt");
